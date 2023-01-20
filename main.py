@@ -11,7 +11,7 @@ def check_dates(file_path, dates_sheet_name):
     sheet = wb.get_sheet_by_name(dates_sheet_name)
     columns = ['D', 'E', 'F']
     today = datetime.now().date()
-    week_from_now = today + timedelta(days=30)
+    week_from_now = today + timedelta(days= int(config['User_Settings']['Days_to_be_considered_late']))
     matching_cells = []
     late_squad_cells = []
 
@@ -169,7 +169,7 @@ def sort_team(file_path, tracker_sheet, team_and_date, team_roles):
 
 
         if team_and_date[squad_cell_to_fill][1] == 'sprint4':
-            team_and_date[squad_cell_to_fill].append(sprint4)
+            team_and_date[squad_cell_to_fill].append(['Designer', 'Designer', 'Senior Dev', 'Dev', 'Dev', 'Dev', 'Dev', 'Test', 'Test', 'Scrum Master'])
 
 
     return team_and_date
@@ -198,7 +198,6 @@ def colour_now(file_path, tracker_sheet, team_date_role):
 
                 if str(cell_value.value) in team_date_role[squad_cell][3] and str(cell_value.value) in team_date_role[squad_cell][2]:
                     sheet[column + row].fill = green_fill
-                    print(squad_cell)
                     team_date_role[squad_cell][3].remove(str(cell_value.value))
                     team_date_role[squad_cell][2].remove(str(cell_value.value))
                     
@@ -226,8 +225,9 @@ def colour_now(file_path, tracker_sheet, team_date_role):
                         sheet[column + default_row].fill = red_fill
                         team_date_role[squad_cell][3].remove(sheet['G' + str(default_row)].value)
                             
-        
+    
     wb.save(config['User_Settings']['updated_sheet_name'])
+    print('Code ran without problems. Your file ' , config['User_Settings']['updated_sheet_name'], ' is saved.')
 
 
 if __name__ == '__main__':
